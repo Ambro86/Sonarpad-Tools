@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import gzip
 import hashlib
 import json
 import os
@@ -40,14 +41,16 @@ def encrypt_bytes(payload: bytes, secret_key: str) -> str:
 
 
 def build_output(source_name: str, payload: bytes, secret_key: str) -> dict[str, str | int]:
+    compressed_payload = gzip.compress(payload, compresslevel=9, mtime=0)
     return {
         "version": 1,
-        "algorithm": "xor-base64-v1",
+        "algorithm": "gzip-xor-base64-v1",
         "source_name": source_name,
         "generated_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "source_sha256": hashlib.sha256(payload).hexdigest(),
-        "payload_b64": encrypt_bytes(payload, secret_key),
+        "payload_b64": encrypt_bytes(compressed_payload, secret_key),
         "size_bytes": len(payload),
+        "compressed_size_bytes": len(compressed_payload),
     }
 
 
