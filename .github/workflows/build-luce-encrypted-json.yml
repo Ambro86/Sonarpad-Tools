@@ -1,0 +1,35 @@
+name: build-luce-encrypted-json
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Build encrypted Oggi in TV payloads
+        env:
+          LUCE_LIST_URL: ${{ secrets.LUCE_LIST_URL }}
+          LUCE_CATALOGUE_URL: ${{ secrets.LUCE_CATALOGUE_URL }}
+          LUCE_ENCRYPTION_KEY: ${{ secrets.LUCE_ENCRYPTION_KEY }}
+        run: |
+          python scripts/build_luce_payloads.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated/luce-list.enc.json generated/luce-catalogue.enc.json
+          git commit -m "Update encrypted luce payloads" || exit 0
+          git push
