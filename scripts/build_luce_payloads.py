@@ -10,7 +10,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 
-STATIC_KEY_PARTS = [b"sonar", b"pad-", b"literal:SonarSecure-"]
+STATIC_KEY_PARTS = [b"sonar", b"pad-", b"SonarSecure-"]
 OUTPUT_DIR = Path("generated")
 LIST_OUTPUT = OUTPUT_DIR / "luce-list.enc.json"
 CATALOGUE_OUTPUT = OUTPUT_DIR / "luce-catalogue.enc.json"
