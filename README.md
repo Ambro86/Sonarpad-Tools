@@ -7,8 +7,3 @@ Current intended use:
 - related tool releases and downloadable support files
 
 GitHub Actions in this repo can also generate encrypted luce payloads.
-
-Required GitHub Secrets:
-- `LUCE_LIST_URL`
-- `LUCE_CATALOGUE_URL`
-- `LUCE_ENCRYPTION_KEY`
